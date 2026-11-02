@@ -10,18 +10,14 @@ import { useRouter } from "next/navigation"
 import { Check, ChevronDown, Eye, Star } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 import type { Category } from "@/types/category";
-import { MOCK_CATEGORIES } from "@/lib/mock-knowledge-center";
-import {
-  MOCK_COURSES,
-  MOCK_RECENT_RESOURCES,
-} from "@/lib/mock-knowledge-center";
+import Link from "next/link";
+
 import {
   MOCK_COURSES,
   MOCK_CATEGORIES,
   MOCK_RECENT_RESOURCES,
   type RecentResource,
 } from "@/lib/mock-knowledge-center";
-import Link from "next/link";
 
 
 export default function KnowledgeCenter() {

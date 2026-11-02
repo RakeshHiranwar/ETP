@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowLeft, BookOpen, ImagePlus, Loader2 } from "lucide-react";
 import { apiFetch, getErrorMessage } from "@/lib/api";
 import type { Category } from "@/types/category";
+import { MOCK_CATEGORIES } from "@/lib/mock-knowledge-center";
 
 // A small rotating palette so the cards still get varied background colours
 // even when the data comes from the API.

@@ -14,6 +14,10 @@ import {
 } from "lucide-react";
 import { apiFetch, getErrorMessage } from "@/lib/api";
 import type { Category } from "@/types/category";
+import {
+  MOCK_COURSES,
+  MOCK_CATEGORIES,
+} from "@/lib/mock-knowledge-center";
 // ── Course type from the backend ────────────────────────────────────────────
 // Adjust field names if the backend returns a different shape.
 
@@ -125,9 +129,7 @@ async function loadData() {
     setCategory(selectedCategory);
 
     const categoryCourses = MOCK_COURSES.filter(
-      (course) =>
-        course.category.toLowerCase() ===
-        selectedCategory.name.toLowerCase()
+      (course) => course.categoryId === selectedCategory.id
     );
 
     setCourses(categoryCourses);
@@ -342,12 +344,14 @@ async function loadData() {
                     </p>
                   )}
                   <div className="mt-2 flex items-center gap-4">
-                    {course.category && (
-                      <span className="flex items-center gap-1 text-[10px] text-gray-400">
-                        <BookOpen size={11} />
-                        {course.category}
-                      </span>
-                    )}
+                    {course.categoryId && (
+                      <span className="flex items-center gap-1 text-[10px] text-gray-400">
+                        <BookOpen size={11} />
+                        {MOCK_CATEGORIES.find(
+                          (cat) => cat.id === course.categoryId
+                        )?.name ?? "General"}
+                      </span>
+                    )}
                     {course.duration && (
                       <span className="flex items-center gap-1 text-[10px] text-gray-400">
                         <Clock size={11} />

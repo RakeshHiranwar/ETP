@@ -9,7 +9,7 @@ export type Course = {
   level: string;
   duration: string;
   image: string;
-  category: string;
+  categoryId: string;
 };
 
 export const MOCK_CATEGORIES: Category[] = [
@@ -66,7 +66,7 @@ export const MOCK_COURSES: Course[] = [
     level: "Beginner",
     duration: "4 hours",
     image: "/images/frontend.png",
-    category: "Frontend",
+    categoryId: "mock-frontend",
   },
   {
     id: "2",
@@ -76,7 +76,7 @@ export const MOCK_COURSES: Course[] = [
     level: "Beginner",
     duration: "6 hours",
     image: "/images/javascript.png",
-    category: "Frontend",
+    categoryId: "mock-frontend",
   },
   {
     id: "3",
@@ -86,7 +86,7 @@ export const MOCK_COURSES: Course[] = [
     level: "Intermediate",
     duration: "8 hours",
     image: "/images/react.png",
-    category: "Frontend",
+    categoryId: "mock-frontend",
   },
   {
     id: "4",
@@ -96,7 +96,7 @@ export const MOCK_COURSES: Course[] = [
     level: "Beginner",
     duration: "5 hours",
     image: "/images/database.png",
-    category: "Database",
+    categoryId: "mock-database",
   },
   {
     id: "5",
@@ -106,7 +106,7 @@ export const MOCK_COURSES: Course[] = [
     level: "Intermediate",
     duration: "5 hours",
     image: "/images/backend.png",
-    category: "Backend",
+    categoryId: "mock-backend",
   },
   {
     id: "6",
@@ -116,7 +116,7 @@ export const MOCK_COURSES: Course[] = [
     level: "Beginner",
     duration: "4 hours",
     image: "/images/aiml.png",
-    category: "AI & ML",
+    categoryId: "mock-aiml",
   },
   {
     id: "7",
@@ -126,7 +126,7 @@ export const MOCK_COURSES: Course[] = [
     level: "Beginner",
     duration: "5 hours",
     image: "/images/cloud.png",
-    category: "Cloud Computing",
+    categoryId: "mock-cloud",
   },
   {
     id: "8",
@@ -136,7 +136,7 @@ export const MOCK_COURSES: Course[] = [
     level: "Beginner",
     duration: "3 hours",
     image: "/images/devops.png",
-    category: "DevOps",
+    categoryId: "mock-devops",
   },
 ];
 

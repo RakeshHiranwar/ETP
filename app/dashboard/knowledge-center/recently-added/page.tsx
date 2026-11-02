@@ -11,81 +11,81 @@ import {
 // When the backend exposes a /resources/recent (or similar) endpoint,
 // import apiFetch from "@/lib/api" and replace MOCK_RESOURCES below with
 // a real useEffect fetch, just like the other pages in this folder.
-export type RecentResource = {
-  id: string | number;
-  title: string;
-  description: string;
-  category: string;
-  image: string;
-  added: string;
-  type: string;
-};
+// export type RecentResource = {
+//   id: string | number;
+//   title: string;
+//   description: string;
+//   category: string;
+//   image: string;
+//   added: string;
+//   type: string;
+// };
 
 // ── TEMPORARY: isolated mock data ─────────────────────────────────────────────
 // Replace this array with a real API call once the backend exposes the endpoint.
 // Do NOT spread this data into the category API — it is completely separate.
-const MOCK_RECENT_RESOURCES: RecentResource[] = [
-  {
-    id: 1,
-    title: "Getting Started with React",
-    description:
-      "Learn the fundamentals of React and understand how to build modern user interfaces.",
-    category: "Frontend",
-    image: "/images/frontend.png",
-    added: "2 hours ago",
-    type: "Guide",
-  },
-  {
-    id: 2,
-    title: "Node.js Backend Fundamentals",
-    description:
-      "Understand backend development using Node.js, APIs and server-side concepts.",
-    category: "Backend",
-    image: "/images/backend.png",
-    added: "5 hours ago",
-    type: "Documentation",
-  },
-  {
-    id: 3,
-    title: "Database Design Basics",
-    description:
-      "Learn database design, relationships and important database concepts.",
-    category: "Database",
-    image: "/images/database.png",
-    added: "Yesterday",
-    type: "Guide",
-  },
-  {
-    id: 4,
-    title: "Introduction to Machine Learning",
-    description:
-      "A beginner-friendly introduction to machine learning concepts and applications.",
-    category: "AI & ML",
-    image: "/images/aiml.png",
-    added: "Yesterday",
-    type: "Tutorial",
-  },
-  {
-    id: 5,
-    title: "Cloud Computing Essentials",
-    description:
-      "Explore the fundamentals of cloud computing, services and deployment models.",
-    category: "Cloud Computing",
-    image: "/images/cloud.png",
-    added: "2 days ago",
-    type: "Documentation",
-  },
-  {
-    id: 6,
-    title: "Introduction to DevOps",
-    description:
-      "Understand DevOps practices, development workflows and continuous delivery.",
-    category: "DevOps",
-    image: "/images/devops.png",
-    added: "3 days ago",
-    type: "Guide",
-  },
-];
+// const MOCK_RECENT_RESOURCES: RecentResource[] = [
+//   {
+//     id: 1,
+//     title: "Getting Started with React",
+//     description:
+//       "Learn the fundamentals of React and understand how to build modern user interfaces.",
+//     category: "Frontend",
+//     image: "/images/frontend.png",
+//     added: "2 hours ago",
+//     type: "Guide",
+//   },
+//   {
+//     id: 2,
+//     title: "Node.js Backend Fundamentals",
+//     description:
+//       "Understand backend development using Node.js, APIs and server-side concepts.",
+//     category: "Backend",
+//     image: "/images/backend.png",
+//     added: "5 hours ago",
+//     type: "Documentation",
+//   },
+//   {
+//     id: 3,
+//     title: "Database Design Basics",
+//     description:
+//       "Learn database design, relationships and important database concepts.",
+//     category: "Database",
+//     image: "/images/database.png",
+//     added: "Yesterday",
+//     type: "Guide",
+//   },
+//   {
+//     id: 4,
+//     title: "Introduction to Machine Learning",
+//     description:
+//       "A beginner-friendly introduction to machine learning concepts and applications.",
+//     category: "AI & ML",
+//     image: "/images/aiml.png",
+//     added: "Yesterday",
+//     type: "Tutorial",
+//   },
+//   {
+//     id: 5,
+//     title: "Cloud Computing Essentials",
+//     description:
+//       "Explore the fundamentals of cloud computing, services and deployment models.",
+//     category: "Cloud Computing",
+//     image: "/images/cloud.png",
+//     added: "2 days ago",
+//     type: "Documentation",
+//   },
+//   {
+//     id: 6,
+//     title: "Introduction to DevOps",
+//     description:
+//       "Understand DevOps practices, development workflows and continuous delivery.",
+//     category: "DevOps",
+//     image: "/images/devops.png",
+//     added: "3 days ago",
+//     type: "Guide",
+//   },
+// ];
 
 export default function RecentlyAddedPage() {
   const router = useRouter();
