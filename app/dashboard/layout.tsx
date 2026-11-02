@@ -18,19 +18,19 @@ export default function Knowledge_Center(
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
-  // useEffect(() => {
-  //   fetch("http://localhost:3001/me", {
-  //     credentials: "include",
-  //   }).then((res) => {
-  //     if (!res.ok) {
-  //       router.push("/");
-  //     } else {
-  //       setLoading(false);
-  //     }
-  //   });
-  // }, []);
+  useEffect(() => {
+    fetch("http://localhost:3001/me", {
+      credentials: "include",
+    }).then((res) => {
+      if (!res.ok) {
+        router.push("/");
+      } else {
+        setLoading(false);
+      }
+    });
+  }, []);
 
-  // if (loading) return <p>Loading...</p>;
+  if (loading) return <p>Loading...</p>;
 
   return (
     <>

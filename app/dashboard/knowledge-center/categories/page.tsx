@@ -42,11 +42,9 @@ export default function CategoriesPage() {
         const data: Category[] = await res.json();
         setCategories(data);
       } catch (err) {
-        console.error("[CategoriesPage] fetch error:", err);
-        setError(
-          err instanceof Error ? err.message : "Failed to load categories."
-        );
-      } finally {
+          console.error("Using mock categories:", err);
+          setCategories(MOCK_CATEGORIES);
+        } finally {
         setLoading(false);
       }
     }

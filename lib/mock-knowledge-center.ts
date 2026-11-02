@@ -139,3 +139,78 @@ export const MOCK_COURSES: Course[] = [
     category: "DevOps",
   },
 ];
+
+
+export type RecentResource = {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  image: string;
+  added: string;
+  type: string;
+  content: string;
+};
+
+export const MOCK_RECENT_RESOURCES: RecentResource[] = [
+  {
+    id: "resource-1",
+    title: "Getting Started with React",
+    description: "Learn the fundamentals of React and modern UI development.",
+    category: "Frontend",
+    image: "/images/frontend.png",
+    added: "2 hours ago",
+    type: "Guide",
+    content: "React is a JavaScript library for building user interfaces. It uses components, props, state and hooks to create interactive applications."
+  },
+  {
+    id: "resource-2",
+    title: "Node.js Backend Fundamentals",
+    description: "Understand backend development using Node.js and APIs.",
+    category: "Backend",
+    image: "/images/backend.png",
+    added: "5 hours ago",
+    type: "Documentation",
+    content: "Node.js allows developers to execute JavaScript outside the browser. It is commonly used to build APIs and server-side applications."
+  },
+  {
+    id: "resource-3",
+    title: "Database Design Basics",
+    description: "Learn database design and relationships.",
+    category: "Database",
+    image: "/images/database.png",
+    added: "Yesterday",
+    type: "Guide",
+    content: "Database design involves organizing data into tables, defining relationships and maintaining data integrity."
+  },
+  {
+    id: "resource-4",
+    title: "Introduction to Machine Learning",
+    description: "A beginner-friendly introduction to machine learning.",
+    category: "AI & ML",
+    image: "/images/aiml.png",
+    added: "Yesterday",
+    type: "Tutorial",
+    content: "Machine learning is a field of AI where systems learn patterns from data to make predictions or decisions."
+  },
+  {
+    id: "resource-5",
+    title: "Cloud Computing Essentials",
+    description: "Explore cloud computing and deployment models.",
+    category: "Cloud Computing",
+    image: "/images/cloud.png",
+    added: "2 days ago",
+    type: "Documentation",
+    content: "Cloud computing provides computing services such as storage, servers and databases over the internet."
+  },
+  {
+    id: "resource-6",
+    title: "Introduction to DevOps",
+    description: "Understand DevOps practices and continuous delivery.",
+    category: "DevOps",
+    image: "/images/devops.png",
+    added: "3 days ago",
+    type: "Guide",
+    content: "DevOps combines development and operations practices to improve collaboration, automation and software delivery."
+  }
+];

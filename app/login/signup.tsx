@@ -6,6 +6,8 @@ import {Nav} from "@/components/ui/navbar"
 
 import { useRouter } from "next/navigation";
 
+import { apiFetch, getErrorMessage } from "@/lib/api";
+
 export function Signup(
     {
   goLogin, 
@@ -16,32 +18,56 @@ export function Signup(
 } 
 ){
     
+  const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
 
-  async function handleSubmit(e: React.FormEvent) {
+
+    async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
 
-    // const res = await fetch("http://localhost:3001/signup", {
-    //   method: "POST",
-    //   credentials: "include",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({ name ,email, password }),
-    // });
+    if (!name.trim() || !email.trim() || !password) {
+        setError("Please fill in all fields.");
+        return;
+    }
 
-    // const data = await res.json();
-    // if (!res.ok) {
-    //   setError(data.error);
-    //   return;
-    // }
+    setLoading(true);
 
-    // redirect here, e.g. router.push("/dashboard")
-     router.push("/dashboard");
-  }
+    try {
+        const res = await apiFetch("/signup", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            name: name.trim(),
+            email: email.trim(),
+            password,
+        }),
+        });
+
+        if (!res.ok) {
+        const message = await getErrorMessage(res);
+        setError(message);
+        return;
+        }
+
+        // Signup successful. Backend has set the authentication cookie.
+        router.replace("/dashboard");
+        router.refresh();
+
+    } catch (err) {
+        console.error("Signup error:", err);
+        setError("Unable to connect to the server. Please try again.");
+    } finally {
+        setLoading(false);
+    }
+    }
+
 
     return(
         <><div className="w-200 h-164 bg-white flex justify-center items-center">
@@ -59,13 +85,30 @@ export function Signup(
 
 
                                 <p className="text-black font-bold pb-2 text-sm">Work email or Employee ID</p>
-                                <input type="text" placeholder="Enter your work email or Id" className="border border-gray-500 h-10 w-90 rounded-lg text-black placeholder:text-gray-500 pl-2 mb-3 placeholder:text-[16px] "  value={email} onChange={(e)=>setEmail(e.target.value)} />
+                               <input
+                                    type="email"
+                                    placeholder="Enter your work email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                    className="border border-gray-500 h-10 w-90 rounded-lg text-black placeholder:text-gray-500 pl-2 mb-3 placeholder:text-[16px]"
+                                    />
 
                                  <p className="text-black font-bold pb-2 text-sm">Password</p>
                                 <input type="password" placeholder="Enter your password" value={password} onChange={(e)=>setPassword(e.target.value)} className="border border-gray-500 h-10 w-90 rounded-lg text-black placeholder:text-gray-500 pl-2 mb-3 placeholder:text-[16px]"  />
                                 
-
-                                <button type="submit" className="mt-5 mb-5 border border-black w-90 h-12 rounded-lg bg-indigo-800 font-bold text-white cursor-pointer">Sign up</button>
+                                {error && (
+                                    <p className="text-red-500 text-sm mb-3">
+                                        {error}
+                                    </p>
+                                    )}
+                                <button
+                                    type="submit"
+                                    disabled={loading}
+                                    className="mt-5 mb-5 border border-black w-90 h-12 rounded-lg bg-indigo-800 font-bold text-white cursor-pointer disabled:opacity-50"
+                                    >
+                                    {loading ? "Creating Account..." : "Sign up"}
+                                    </button>
                             </form>
 
                             <div className="w-90 border-b border-gray-400 mb-5"></div>

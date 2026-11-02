@@ -3,6 +3,9 @@
 import Image from "next/image";
 import { ArrowLeft, Clock, Eye } from "lucide-react";
 import { useRouter } from "next/navigation";
+import {
+  MOCK_RECENT_RESOURCES,
+} from "@/lib/mock-knowledge-center";
 
 // ── Type for a recently-added resource ────────────────────────────────────────
 // When the backend exposes a /resources/recent (or similar) endpoint,
@@ -198,11 +201,16 @@ export default function RecentlyAddedPage() {
               </div>
 
               <button
-                type="button"
-                className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-[10px] font-semibold text-blue-600 transition hover:bg-indigo-50"
-              >
-                <Eye size={13} />
-                View Resource
+                  type="button"
+                  onClick={() =>
+                    router.push(
+                      `/dashboard/knowledge-center/recently-added/${resource.id}`
+                    )
+                  }
+                  className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-[10px] font-semibold text-blue-600 transition hover:bg-indigo-50"
+                >
+                  <Eye size={13} />
+                  View Resource
               </button>
 
             </div>

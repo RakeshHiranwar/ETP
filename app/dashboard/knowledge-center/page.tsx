@@ -11,11 +11,55 @@ import { Check, ChevronDown, Eye, Star } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 import type { Category } from "@/types/category";
 import { MOCK_CATEGORIES } from "@/lib/mock-knowledge-center";
+import {
+  MOCK_COURSES,
+  MOCK_RECENT_RESOURCES,
+} from "@/lib/mock-knowledge-center";
+import {
+  MOCK_COURSES,
+  MOCK_CATEGORIES,
+  MOCK_RECENT_RESOURCES,
+  type RecentResource,
+} from "@/lib/mock-knowledge-center";
+import Link from "next/link";
+
 
 export default function KnowledgeCenter() {
 
   const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
+
+  const [search, setSearch] = useState("");
+  const [searchSubmitted, setSearchSubmitted] = useState(false);
+
+  const searchResults = [
+  ...MOCK_COURSES.map((course) => ({
+    id: course.id,
+    title: course.title,
+    description: course.description,
+    category:
+      MOCK_CATEGORIES.find(
+        (cat) => cat.id === course.categoryId
+      )?.name ?? "General",
+    href: `/dashboard/knowledge-center/categories/courses?categoryId=${course.categoryId}`,
+  })),
+
+  ...MOCK_RECENT_RESOURCES.map((resource) => ({
+    id: resource.id,
+    title: resource.title,
+    description: resource.description,
+    category: resource.category,
+    href: `/dashboard/knowledge-center/recently-added/${resource.id}`,
+  })),
+].filter((item) => {
+  const query = search.trim().toLowerCase();
+
+  return (
+    item.title.toLowerCase().includes(query) ||
+    item.description.toLowerCase().includes(query) ||
+    item.category.toLowerCase().includes(query)
+  );
+});
 
   // useEffect(() => { 
   //   apiFetch("/categories")
@@ -82,7 +126,80 @@ useEffect(() => {
           <Field className="pt-6">
             <ButtonGroup className="gap-2">
               <Input id="input-button-group" placeholder="Type to search..." className="bg-white border-black "/>
-              <Button className="bg-blue-600 text-white font-mono hover:bg-blue-700 hover:cursor-pointer text-[11px]">Search</Button>
+                            
+              <Field className="pt-6">
+                <ButtonGroup className="gap-2">
+
+                  <Input
+                    id="input-button-group"
+                    placeholder="Search courses and resources..."
+                    value={search}
+                    onChange={(e) => {
+                      setSearch(e.target.value);
+                      setSearchSubmitted(false);
+                    }}
+                    className="bg-white border-black"
+                  />
+
+                  <Button
+                    type="button"
+                    onClick={() => setSearchSubmitted(true)}
+                    className="bg-blue-600 text-white"
+                  >
+                    Search
+                  </Button>
+
+                </ButtonGroup>
+              </Field>
+
+              
+              {searchSubmitted && search.trim() && (
+                <div className="mx-5 mb-5 rounded-xl border bg-white p-4">
+
+                  <div className="mb-4 flex items-center justify-between">
+                    <h2 className="font-semibold text-slate-800">
+                      Search Results
+                    </h2>
+
+                    <span className="text-xs text-gray-500">
+                      {searchResults.length} results found
+                    </span>
+                  </div>
+
+                  {searchResults.length > 0 ? (
+                    <div className="space-y-3">
+
+                      {searchResults.map((item) => (
+                        <Link
+                          key={`${item.category}-${item.id}`}
+                          href={item.href}
+                          className="block rounded-lg border p-3 transition hover:bg-indigo-50"
+                        >
+                          <h3 className="text-sm font-semibold text-slate-800">
+                            {item.title}
+                          </h3>
+
+                          <p className="mt-1 text-xs text-gray-500">
+                            {item.description}
+                          </p>
+
+                          <span className="mt-2 block text-xs text-blue-600">
+                            {item.category}
+                          </span>
+                        </Link>
+                      ))}
+
+                    </div>
+                  ) : (
+                    <p className="py-6 text-center text-sm text-gray-500">
+                      No results found. Try another keyword.
+                    </p>
+                  )}
+
+                </div>
+              )}
+
+
             </ButtonGroup>
           </Field>
         </div>
@@ -161,11 +278,20 @@ useEffect(() => {
                 </Link>
 
           </div>
+           {/* <Recents />
            <Recents />
            <Recents />
            <Recents />
-           <Recents />
-           <Recents />
+           <Recents /> */}
+
+           {MOCK_RECENT_RESOURCES.slice(0, 5).map((resource) => (
+              <Recents
+                key={resource.id}
+                resource={resource}
+              />
+            ))}
+
+            
           </div>
           <div className="bg-white min-h-55 w-md mt-1 rounded-xl  border shadow shadow-gray-200">
              <div className="flex justify-between pl-2 pt-2 mb-1">
@@ -225,24 +351,57 @@ useEffect(() => {
 }
 
 
-export function Recents(){
-  return(
-    <>
+// export function Recents(){
+//   return(
+//     <>
     
-      <div className="w-md flex justify-between pl-2 pt-2 ">
-        <div className="flex">
-          <img src="/images/file-text.png" alt="" height={25} width={22} />
-          <p className="text-[13px] text-gray-800 font-jakarta font-bold pl-1 pt-1">Understanding useState in React </p>
-        </div>
+//       <div className="w-md flex justify-between pl-2 pt-2 ">
+//         <div className="flex">
+//           <img src="/images/file-text.png" alt="" height={25} width={22} />
+//           <p className="text-[13px] text-gray-800 font-jakarta font-bold pl-1 pt-1">Understanding useState in React </p>
+//         </div>
 
-        <span  className="text-[12px] text-gray-600 font-roboto pr-1 font-semibold pt-1">2 days ago</span>
+//         <span  className="text-[12px] text-gray-600 font-roboto pr-1 font-semibold pt-1">2 days ago</span>
 
-      </div>
-    </>
-  )
+//       </div>
+//     </>
+//   )
 
-}
+// }
 
+
+     export function Recents({
+        resource,
+      }: {
+        resource: RecentResource;
+      }) {
+        return (
+          <Link
+            href={`/dashboard/knowledge-center/recently-added/${resource.id}`}
+            className="flex items-center justify-between px-3 py-2 hover:bg-indigo-50 rounded-lg"
+          >
+            <div className="flex min-w-0 items-center gap-2">
+
+              <img
+                src={resource.image}
+                alt={resource.title}
+                width={22}
+                height={25}
+                className="object-contain"
+              />
+
+              <p className="truncate text-[13px] font-bold text-gray-800">
+                {resource.title}
+              </p>
+
+            </div>
+
+            <span className="shrink-0 pl-2 text-[11px] text-gray-500">
+              {resource.added}
+            </span>
+          </Link>
+        );
+      }
 
 
 export function Dropdown() {

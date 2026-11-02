@@ -16,16 +16,17 @@ import { apiFetch, getErrorMessage } from "@/lib/api";
 import type { Category } from "@/types/category";
 // ── Course type from the backend ────────────────────────────────────────────
 // Adjust field names if the backend returns a different shape.
-type Course = {
-  id: string;
-  title: string;
-  description?: string;
-  type?: string;
-  level?: string;
-  duration?: string;
-  image?: string;
-  category?: string;
-};
+
+// type Course = {
+//   id: string;
+//   title: string;
+//   description?: string;
+//   type?: string;
+//   level?: string;
+//   duration?: string;
+//   image?: string;
+//   category?: string;
+// };
 
 import {
   MOCK_COURSES,
