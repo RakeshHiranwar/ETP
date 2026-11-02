@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Side, Nav, Right } from "@/app/dashboard/dash_page";
 import { useEffect } from "react";
 import { useState } from "react";
+import { apiFetch } from "@/lib/api";
 
 export default function Knowledge_Center(
 
@@ -19,16 +20,31 @@ export default function Knowledge_Center(
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3001/me", {
-      credentials: "include",
-    }).then((res) => {
-      if (!res.ok) {
-        router.push("/");
-      } else {
-        setLoading(false);
+    let cancelled = false;
+
+    async function checkAuth() {
+      try {
+        const res = await apiFetch("/me");
+
+        if (!res.ok) {
+          router.replace("/");
+          return;
+        }
+
+        if (!cancelled) {
+          setLoading(false);
+        }
+      } catch {
+        router.replace("/");
       }
-    });
-  }, []);
+    }
+
+    checkAuth();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [router]);
 
   if (loading) return <p>Loading...</p>;
 

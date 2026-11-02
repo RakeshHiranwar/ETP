@@ -14,15 +14,12 @@ import {
 } from "lucide-react";
 import { apiFetch, getErrorMessage } from "@/lib/api";
 import type { Category } from "@/types/category";
-import {
-  MOCK_COURSES,
-  MOCK_CATEGORIES,
-} from "@/lib/mock-knowledge-center";
+
 // ── Course type from the backend ────────────────────────────────────────────
 // Adjust field names if the backend returns a different shape.
 
 // type Course = {
-//   id: string;
+//   id: string; 
 //   title: string;
 //   description?: string;
 //   type?: string;
@@ -152,9 +149,7 @@ async function loadData() {
 
     setCourses(
       MOCK_COURSES.filter(
-        (course) =>
-          course.category.toLowerCase() ===
-          selectedCategory.name.toLowerCase()
+        (course) => course.categoryId === selectedCategory.id
       )
     );
   } finally {

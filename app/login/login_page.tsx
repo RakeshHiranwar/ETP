@@ -6,6 +6,24 @@ import {Nav} from "@/components/ui/navbar"
 
 import { useRouter } from "next/navigation";
 
+import { apiFetch, getErrorMessage } from "@/lib/api";
+
+const res = await apiFetch("/login", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({ email, password }),
+});
+
+if (!res.ok) {
+  setError(await getErrorMessage(res));
+  return;
+}
+
+router.replace("/dashboard");
+router.refresh();
+
 
 
   export  function Navbar(){
@@ -79,7 +97,7 @@ export function Login({ goSignup, Forgot_Pass }: { goSignup: () => void, Forgot_
 
     
 
-    redirect here, e.g. router.push("/dashboard")
+    // redirect here, e.g. router.push("/dashboard")
      router.push("/dashboard");
   }
  
