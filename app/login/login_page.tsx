@@ -71,7 +71,14 @@ import { apiFetch, getErrorMessage } from "@/lib/api";
         );
     }
 
-export function Login({ goSignup, Forgot_Pass }: { goSignup: () => void, Forgot_Pass: () => void;}) {
+
+export function Login({
+  goSignup,
+  Forgot_Pass,
+}: {
+  goSignup: () => void;
+  Forgot_Pass: () => void;
+}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -81,64 +88,121 @@ export function Login({ goSignup, Forgot_Pass }: { goSignup: () => void, Forgot_
     e.preventDefault();
     setError("");
 
-    try {
-  const res = await apiFetch("/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email, password }),
-  });
+    if (!email.trim() || !password.trim()) {
+      setError("Please enter your email and password.");
+      return;
+    }
 
-  if (!res.ok) {
-    setError(await getErrorMessage(res));
-    return;
+    try {
+      const res = await apiFetch("/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      if (!res.ok) {
+        setError(await getErrorMessage(res));
+        return;
+      }
+
+      router.push("/dashboard");
+
+    } catch (err) {
+      setError("Unable to connect to the server. Please try again.");
+    }
   }
 
-  router.push("/dashboard");
+  return (
+    <>
+      <div className="w-full lg:w-1/2 px-5 py-1 bg-white flex justify-center items-center">
+        <div className="login h-auto w-full max-w-md border border-black rounded-xl p-10 shadow-sm shadow-gray-800">
 
-} catch {
-  setError("Unable to connect to the server. Please try again.");
+          <div className="mb-3">
+            <h1 className="text-slate-950 text-3xl font-nunito font-bold">
+              Welcome back
+            </h1>
+            <p className="text-gray-500 font-inter text-[14px]">
+              Sign in with your authorized organization account.
+            </p>
+          </div>
+
+          <div>
+            <form onSubmit={handleSubmit}>
+              <p className="text-black font-bold pb-2 text-sm">
+                Work email or Employee ID
+              </p>
+
+              <input
+                type="text"
+                placeholder="Enter your work email or Id"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="border border-gray-500 h-10 w-full rounded-lg text-black placeholder:text-gray-500 pl-2 mb-3 placeholder:text-[16px]"
+              />
+
+              <p className="text-black font-bold pb-2 text-sm">
+                Password
+              </p>
+
+              <input
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="border border-gray-500 h-10 w-full rounded-lg text-black placeholder:text-gray-500 pl-2 mb-3 placeholder:text-[16px]"
+              />
+
+              <div className="flex justify-between items-center w-full">
+                <input
+                  type="checkbox"
+                  name="Remember me"
+                />
+
+                <p className="text-gray-800 text-[13px]">
+                  Remember me
+                </p>
+
+                <a
+                  onClick={Forgot_Pass}
+                  className="flex justify-between items-center text-black text-[12px] font-bold pt-1 hover:underline underline-offset-1 cursor-pointer"
+                >
+                  Forgot Password?
+                </a>
+              </div>
+
+              {error && (
+                <p className="text-red-500 text-sm mb-2">
+                  {error}
+                </p>
+              )}
+
+              <button
+                type="submit"
+                className="mt-5 mb-5 border border-black w-full h-12 rounded-lg bg-indigo-800 font-bold text-white cursor-pointer"
+              >
+                Sign in
+              </button>
+            </form>
+
+            <div className="w-full border-b border-gray-400 mb-5"></div>
+
+            <span className="text-slate-900 text-[15px] pl-3 font-sans font-semibold">
+              Don't have an account ?{" "}
+              <a
+                onClick={goSignup}
+                className="text-indigo-800 cursor-pointer"
+              >
+                Sign up
+              </a>
+            </span>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }
- 
-         
-        return(
-             
-            <>
-                <div className="w-full lg:w-1/2  px-5 py-1  bg-white flex justify-center items-center">
-                    <div className="login h-auto w-full max-w-md border border-black rounded-xl p-10 shadow-sm shadow-gray-800">
-                         
-                        <div className="mb-3">
-                            <h1 className="text-slate-950 text-3xl font-nunito font-bold">Welcome back</h1>
-                            <p className="text-gray-500 font-inter text-[14px]">Sign in with your authorized organization account.</p>
-                        </div>
-
-                        <div>
-                          <form onSubmit={handleSubmit}>
-                                <p className="text-black font-bold pb-2 text-sm">Work email or Employee ID</p>
-                                <input type="text" placeholder="Enter your work email or Id" value={email} onChange={(e)=>setEmail(e.target.value)} className="border border-gray-500 h-10 w-90 rounded-lg text-black placeholder:text-gray-500 pl-2 mb-3 placeholder:text-[16px] "  />
-
-                                 <p className="text-black font-bold pb-2 text-sm">Password</p>
-                                <input type="password" placeholder="Enter your password" value={password} onChange={(e)=>setPassword(e.target.value)} className="border border-gray-500 h-10 w-90 rounded-lg text-black placeholder:text-gray-500 pl-2 mb-3 placeholder:text-[16px]"  />
-
-                                <div className="flex justify-between items-center w-full">
-                                    <input type="checkbox" name="Remember me" id="" /><p className="text-gray-800 text-[13px] pl-0 pr-45 ">Remember me</p>
-
-                                    <a onClick={Forgot_Pass} className="flex justify-between items-center text-black text-[12px] font-bold pt-1  hover:underline underline-offset-1">Forgot Password?</a>
-                                </div>
-
-                                {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
-
-                                <button type="submit" className="mt-5 mb-5 border border-black w-full h-12 rounded-lg bg-indigo-800 font-bold text-white cursor-pointer">Sign in</button>
-                            </form>
-
-                            <div className="w-full border-b border-gray-400 mb-5"></div>
-
-                            <span className="text-slate-900 text-[15px] pl-3 font-sans font-semibold">Don't have an account ? <a  onClick={goSignup}  className="text-indigo-800 cursor-pointer">Sign up</a></span>
-
-                        </div>
-                    </div>
-                </div>
-            </>
-        );
-    }
