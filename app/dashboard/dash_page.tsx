@@ -449,7 +449,7 @@ max-w-xltext-[13px] placeholder:p-1 placeholder:text-[13px] placeholder:text-sla
                                     <h1 className="text-black font-sans font-semibold text-xl">Complete Overview</h1>
                                 </span>
 
-                                <button className="text-action text-slate-800 text-[10px] flex "><a href="d">View report</a>
+                                <button disabled className="text-action text-slate-800 text-[10px] flex "><a href="d">View report</a>
                                      <a href="d"><svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="5"
@@ -489,7 +489,7 @@ max-w-xltext-[13px] placeholder:p-1 placeholder:text-[13px] placeholder:text-sla
                                     <h1 className="text-black font-sans font-semibold text-xl">Priority skill gaps</h1>
                                 </span>
 
-                                <button className="text-action text-slate-800 text-[10px] flex "><a href="d">Open matrix</a>
+                                <button disabled className="text-action text-slate-800 text-[10px] flex "><a href="d">Open matrix</a>
                                      <a href="d"><svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="5"

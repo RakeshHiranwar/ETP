@@ -14,7 +14,7 @@ export default function ResourceDetailPage() {
   const params = useParams();
 
   const resource = MOCK_RECENT_RESOURCES.find(
-    (item) => item.id === params.id
+    (item) => String(item.id) === String(params.id)
   );
 
   if (!resource) {

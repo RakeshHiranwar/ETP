@@ -10,7 +10,6 @@ import { useRouter } from "next/navigation"
 import { Check, ChevronDown, Eye, Star } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 import type { Category } from "@/types/category";
-import Link from "next/link";
 
 import {
   MOCK_COURSES,
@@ -121,7 +120,7 @@ useEffect(() => {
 
           <Field className="pt-6">
             <ButtonGroup className="gap-2">
-              <Input id="input-button-group" placeholder="Type to search..." className="bg-white border-black "/>
+              {/* <Input id="input-button-group" placeholder="Type to search..." className="bg-white border-black "/> */}
                             
               <Field className="pt-6">
                 <ButtonGroup className="gap-2">

@@ -8,21 +8,21 @@ import { useRouter } from "next/navigation";
 
 import { apiFetch, getErrorMessage } from "@/lib/api";
 
-const res = await apiFetch("/login", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({ email, password }),
-});
+// const res = await apiFetch("/login", {
+//   method: "POST",
+//   headers: {
+//     "Content-Type": "application/json",
+//   },
+//   body: JSON.stringify({ email, password }),
+// });
 
-if (!res.ok) {
-  setError(await getErrorMessage(res));
-  return;
-}
+// if (!res.ok) {
+//   setError(await getErrorMessage(res));
+//   return;
+// }
 
-router.replace("/dashboard");
-router.refresh();
+// router.replace("/dashboard");
+// router.refresh();
 
 
 
@@ -81,25 +81,25 @@ export function Login({ goSignup, Forgot_Pass }: { goSignup: () => void, Forgot_
     e.preventDefault();
     setError("");
 
-    const res = await fetch("http://localhost:3001/login", {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+  const res = await apiFetch("/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, password }),
+  });
 
-    const data = await res.json();
-    if (!res.ok) {
-      setError(data.error);
-      console.log(data);
-      return data;
- }
-
-    
-
-    // redirect here, e.g. router.push("/dashboard")
-     router.push("/dashboard");
+  if (!res.ok) {
+    setError(await getErrorMessage(res));
+    return;
   }
+
+  router.push("/dashboard");
+
+} catch {
+  setError("Unable to connect to the server. Please try again.");
+}
  
          
         return(
