@@ -10,23 +10,61 @@ import { useRouter } from "next/navigation"
 import { Check, ChevronDown, Eye, Star } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 import type { Category } from "@/types/category";
-
+import { MOCK_CATEGORIES } from "@/lib/mock-knowledge-center";
 
 export default function KnowledgeCenter() {
 
   const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
 
-  useEffect(() => {
-    apiFetch("/categories")
-      .then((res) => (res.ok ? res.json() : Promise.reject()))
-      .then((data: Category[]) => setCategories(data))
-      .catch(() => {
-        // Non-fatal: category cards simply stay empty while
-        // the rest of the page still renders normally.
-        console.error("[KnowledgeCenter] Failed to load categories");
-      });
-  }, []);
+  // useEffect(() => { 
+  //   apiFetch("/categories")
+  //     .then((res) => (res.ok ? res.json() : Promise.reject()))
+  //     .then((data: Category[]) => setCategories(data))
+  //     .catch(() => {
+  //       // Non-fatal: category cards simply stay empty while
+  //       // the rest of the page still renders normally.
+  //       console.error("[KnowledgeCenter] Failed to load categories");
+  //     });
+  // }, []);
+
+  
+useEffect(() => {
+  let cancelled = false;
+
+  async function loadCategories() {
+    try {
+      const response = await apiFetch("/categories");
+
+      if (!response.ok) {
+        throw new Error("Unable to fetch categories");
+      }
+
+      const data: Category[] = await response.json();
+
+      if (!Array.isArray(data)) {
+        throw new Error("Invalid categories response");
+      }
+
+      if (!cancelled) {
+        setCategories(data);
+      }
+    } catch (error) {
+      console.error("Using mock categories:", error);
+
+      if (!cancelled) {
+        setCategories(MOCK_CATEGORIES);
+      }
+    }
+  }
+
+  loadCategories();
+
+  return () => {
+    cancelled = true;
+  };
+}, []);
+
 
   return (
     <>

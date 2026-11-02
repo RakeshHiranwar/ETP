@@ -27,48 +27,11 @@ type Course = {
   category?: string;
 };
 
-const HARDCODED_COURSES: Course[] = [
-  {
-    id: "1",
-    title: "HTML & CSS Fundamentals",
-    description: "Learn the basics of HTML and CSS to build web pages.",
-    type: "Tutorial",
-    level: "Beginner",
-    duration: "4 hours",
-    image: "/images/frontend.png",
-    category: "Frontend",
-  },
-  {
-    id: "2",
-    title: "JavaScript for Beginners",
-    description: "Understand JavaScript and make websites interactive.",
-    type: "Guide",
-    level: "Beginner",
-    duration: "6 hours",
-    image: "/images/javascript.png",
-    category: "Frontend",
-  },
-  {
-    id: "3",
-    title: "React.js Complete Guide",
-    description: "Learn React components, props, state, and hooks.",
-    type: "Tutorial",
-    level: "Intermediate",
-    duration: "8 hours",
-    image: "/images/react.png",
-    category: "Frontend",
-  },
-  {
-    id: "4",
-    title: "Database Management Basics",
-    description: "Learn database concepts and SQL fundamentals.",
-    type: "Documentation",
-    level: "Beginner",
-    duration: "5 hours",
-    image: "/images/database.png",
-    category: "Database",
-  },
-];
+import {
+  MOCK_COURSES,
+  MOCK_CATEGORIES,
+  type Course,
+} from "@/lib/mock-knowledge-center";
 
 const filters = ["All", "Guides", "Tutorials", "Documentation"];
 function CoursesContent() {
@@ -81,16 +44,24 @@ function CoursesContent() {
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [activeFilter, setActiveFilter] = useState("All");
+
   useEffect(() => {
-    if (!categoryId) {
-      // Use a microtask so state updates don't happen synchronously in the
-      // effect body, which would violate react-hooks/set-state-in-effect.
-      Promise.resolve().then(() => {
-        setLoading(false);
-        setError("No category selected. Please navigate from the Categories page.");
-      });
-      return;
-    }
+//     if (!categoryId) {
+//       // Use a microtask so state updates don't happen synchronously in the
+//       // effect body, which would violate react-hooks/set-state-in-effect.
+//       Promise.resolve().then(() => {
+//         setLoading(false);
+//         setError("No category selected. Please navigate from the Categories page.");
+//       });
+//       return;
+//     }
+        if (!categoryId) {
+          setCategory(null);
+          setCourses(MOCK_COURSES);
+          setError(null);
+          setLoading(false);
+          return;
+        }
 //     async function loadData() {
 //       setLoading(true);
 //       setError(null);
@@ -124,37 +95,70 @@ function CoursesContent() {
 //       }
 //     }
 
+
 async function loadData() {
   setLoading(true);
   setError(null);
 
-  // Courses come from hardcoded data.
-  setCourses(HARDCODED_COURSES);
-
   try {
-    // Fetch only the selected category.
-    const catRes = await apiFetch(`/categories`);
+    const response = await apiFetch("/categories");
 
-    if (!catRes.ok) {
-      const msg = await getErrorMessage(catRes);
-      throw new Error(msg);
+    if (!response.ok) {
+      throw new Error("Unable to fetch categories");
     }
 
-    const catData: Category = await catRes.json();
+    const data: Category[] = await response.json();
 
-    setCategory(catData);
-  } catch (err) {
-    console.error("[CoursesPage] load error:", err);
+    if (!Array.isArray(data)) {
+      throw new Error("Invalid category response");
+    }
 
-    setError(
-      err instanceof Error
-        ? err.message
-        : "Failed to load category data."
+    const selectedCategory = data.find(
+      (item) => item.id === categoryId
+    );
+
+    if (!selectedCategory) {
+      throw new Error("Category not found");
+    }
+
+    setCategory(selectedCategory);
+
+    const categoryCourses = MOCK_COURSES.filter(
+      (course) =>
+        course.category.toLowerCase() ===
+        selectedCategory.name.toLowerCase()
+    );
+
+    setCourses(categoryCourses);
+
+  } catch (error) {
+    console.error("Using mock course data:", error);
+
+    const selectedCategory = MOCK_CATEGORIES.find(
+      (item) => item.id === categoryId
+    );
+
+    if (!selectedCategory) {
+      setCategory(null);
+      setCourses([]);
+      setError("Category not found.");
+      return;
+    }
+
+    setCategory(selectedCategory);
+
+    setCourses(
+      MOCK_COURSES.filter(
+        (course) =>
+          course.category.toLowerCase() ===
+          selectedCategory.name.toLowerCase()
+      )
     );
   } finally {
     setLoading(false);
   }
 }
+
 
     loadData();
   }, [categoryId]);
@@ -162,10 +166,18 @@ async function loadData() {
     const matchesSearch =
       (course.title ?? "").toLowerCase().includes(search.toLowerCase()) ||
       (course.description ?? "").toLowerCase().includes(search.toLowerCase());
-    const matchesFilter =
-      activeFilter === "All" ||
-      (course.type ?? "").toLowerCase() ===
-        activeFilter.slice(0, -1).toLowerCase();
+    
+      const filterMap: Record<string, string | null> = {
+        All: null,
+        Guides: "Guide",
+        Tutorials: "Tutorial",
+        Documentation: "Documentation",
+      };
+
+      const matchesFilter =
+        filterMap[activeFilter] === null ||
+        course.type.toLowerCase() ===
+          filterMap[activeFilter]?.toLowerCase();
     return matchesSearch && matchesFilter;
   });
   return (
