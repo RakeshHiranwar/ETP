@@ -218,14 +218,14 @@ useEffect(() => {
 
                           {categoryResults.length > 0 ? (
 
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                              <div className="grid grid-cols-1 gap-3 w-full">
 
                                   {categoryResults.map((category) => (
 
                                       <Link
                                           key={category.id}
                                           href={`/dashboard/knowledge-center/categories/courses?categoryId=${category.id}`}
-                                          className="flex items-center gap-3 rounded-lg border p-3 transition hover:bg-indigo-50"
+                                          className="flex w-full items-center gap-3 rounded-lg border p-3 transition hover:bg-indigo-50"
                                       >
 
                                           {category.image?.url ? (
