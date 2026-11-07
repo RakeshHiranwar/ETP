@@ -148,28 +148,29 @@ useEffect(() => {
       <div className="left">
 
         <div className="pt-3" >
-          <div className="ml-5 lg:w-235  lg:h-55 mr-5 bg-indigo-50 p-4 rounded-2xl">
+          <div className="relative z-50 ml-5 lg:w-235 min-h-55 mr-5 bg-indigo-50 p-4 rounded-2xl overflow-visible">
 
           <div className="lg:w-75 font-serif ">
             <div className="font-serif font-semibold text-slate-800 text-2xl pb-1 font-roboto ">Knowledge Center </div>
             <div className="text-[14px] text-gray-600">  Find guides, tutorials, documentation, FAQs and learning resources to help you grow.</div>
 
-          <Field className="pt-6">
-            <ButtonGroup className="gap-2">
-              {/* <Input id="input-button-group" placeholder="Type to search..." className="bg-white border-black "/> */}
-                            
-              <Field className="pt-6">
-                <ButtonGroup className="gap-2">
+          {/* Search Bar and Results */}
+
+          <div className="relative mt-6 w-full max-w-xl">
+
+              {/* Search Input and Button */}
+
+              <div className="flex items-center gap-2">
 
                   <Input
-                    id="input-button-group"
-                    placeholder="Search courses and resources..."
-                    value={search}
-                    onChange={(e) => {
-                      setSearch(e.target.value);
-                      setSearchSubmitted(false);
-                    }}
-                    className="bg-white border-black"
+                      id="input-button-group"
+                      placeholder="Search courses and resources..."
+                      value={search}
+                      onChange={(e) => {
+                          setSearch(e.target.value);
+                          setSearchSubmitted(false);
+                      }}
+                      className="bg-white border-black"
                   />
 
                   <Button
@@ -183,121 +184,146 @@ useEffect(() => {
                       Search
                   </Button>
 
-                </ButtonGroup>
-              </Field>
+              </div>
 
-              
+
+              {/* Search Results Popup */}
+
               {searchSubmitted && search.trim() && (
-                <div className="mx-5 mb-5 rounded-xl border bg-white p-4">
 
-                  <div className="mb-4 flex items-center justify-between">
-                    <h2 className="font-semibold text-slate-800">
-                      Search Results
-                    </h2>
+                  <div className="absolute left-0 top-full z-[100] mt-2 w-full max-w-2xl max-h-[70vh] overflow-y-auto rounded-xl border border-gray-300 bg-white p-5 shadow-2xl">
 
-                    <span className="text-xs text-gray-500">
-                      {searchResults.length} results found
-                    </span>
-                  </div>
+                      {/* Search Heading */}
 
-                  {/* Category Search Results */}
+                      <div className="mb-4 flex items-center justify-between">
 
-                  <div className="mb-5">
+                          <h2 className="font-semibold text-slate-800">
+                              Search Results
+                          </h2>
 
-                      <h3 className="mb-3 text-sm font-semibold text-slate-800">
-                          Categories
-                      </h3>
+                          <span className="text-xs text-gray-500">
+                              {categoryResults.length + searchResults.length} results found
+                          </span>
 
-                      {categoryResults.length > 0 ? (
+                      </div>
 
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 
-                              {categoryResults.map((category) => (
+                      {/* Category Search Results */}
 
-                                  <Link
-                                      key={category.id}
-                                      href={`/dashboard/knowledge-center/categories/courses?categoryId=${category.id}`}
-                                      className="flex items-center gap-3 rounded-lg border p-3 transition hover:bg-indigo-50"
-                                  >
+                      <div className="mb-5">
 
-                                      {category.image?.url ? (
-
-                                          <img
-                                              src={category.image.url}
-                                              alt={category.name}
-                                              className="h-10 w-10 object-contain"
-                                          />
-
-                                      ) : (
-
-                                          <div className="h-10 w-10 rounded bg-indigo-100" />
-
-                                      )}
-
-                                      <div>
-
-                                          <h4 className="text-sm font-semibold text-slate-800">
-                                              {category.name}
-                                          </h4>
-
-                                          <p className="text-xs text-gray-500">
-                                              {category.resourceCount}+ resources
-                                          </p>
-
-                                      </div>
-
-                                  </Link>
-
-                              ))}
-
-                          </div>
-
-                      ) : (
-
-                          <p className="text-sm text-gray-500">
-                              No matching categories found.
-                          </p>
-
-                      )}
-
-                  </div>
-
-                  {searchResults.length > 0 ? (
-                    <div className="space-y-3">
-
-                      {searchResults.map((item) => (
-                        <Link
-                          key={`${item.category}-${item.id}`}
-                          href={item.href}
-                          className="block rounded-lg border p-3 transition hover:bg-indigo-50"
-                        >
-                          <h3 className="text-sm font-semibold text-slate-800">
-                            {item.title}
+                          <h3 className="mb-3 text-sm font-semibold text-slate-800">
+                              Categories
                           </h3>
 
-                          <p className="mt-1 text-xs text-gray-500">
-                            {item.description}
-                          </p>
+                          {categoryResults.length > 0 ? (
 
-                          <span className="mt-2 block text-xs text-blue-600">
-                            {item.category}
-                          </span>
-                        </Link>
-                      ))}
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
 
-                    </div>
-                  ) : (
-                    <p className="py-6 text-center text-sm text-gray-500">
-                      No results found. Try another keyword.
-                    </p>
-                  )}
+                                  {categoryResults.map((category) => (
 
-                </div>
+                                      <Link
+                                          key={category.id}
+                                          href={`/dashboard/knowledge-center/categories/courses?categoryId=${category.id}`}
+                                          className="flex items-center gap-3 rounded-lg border p-3 transition hover:bg-indigo-50"
+                                      >
+
+                                          {category.image?.url ? (
+
+                                              <img
+                                                  src={category.image.url}
+                                                  alt={category.name}
+                                                  className="h-10 w-10 object-contain"
+                                              />
+
+                                          ) : (
+
+                                              <div className="h-10 w-10 rounded bg-indigo-100" />
+
+                                          )}
+
+                                          <div>
+
+                                              <h4 className="text-sm font-semibold text-slate-800">
+                                                  {category.name}
+                                              </h4>
+
+                                              <p className="text-xs text-gray-500">
+                                                  {category.resourceCount}+ resources
+                                              </p>
+
+                                          </div>
+
+                                      </Link>
+
+                                  ))}
+
+                              </div>
+
+                          ) : (
+
+                              <p className="text-sm text-gray-500">
+                                  No matching categories found.
+                              </p>
+
+                          )}
+
+                      </div>
+
+
+                      {/* Course and Resource Results */}
+
+                      <div>
+
+                          <h3 className="mb-3 text-sm font-semibold text-slate-800">
+                              Courses & Resources
+                          </h3>
+
+                          {searchResults.length > 0 ? (
+
+                              <div className="space-y-3">
+
+                                  {searchResults.map((item) => (
+
+                                      <Link
+                                          key={`${item.category}-${item.id}`}
+                                          href={item.href}
+                                          className="block rounded-lg border p-3 transition hover:bg-indigo-50"
+                                      >
+
+                                          <h3 className="text-sm font-semibold text-slate-800">
+                                              {item.title}
+                                          </h3>
+
+                                          <p className="mt-1 text-xs text-gray-500">
+                                              {item.description}
+                                          </p>
+
+                                          <span className="mt-2 block text-xs text-blue-600">
+                                              {item.category}
+                                          </span>
+
+                                      </Link>
+
+                                  ))}
+
+                              </div>
+
+                          ) : (
+
+                              <p className="py-3 text-sm text-gray-500">
+                                  No matching courses or resources found.
+                              </p>
+
+                          )}
+
+                      </div>
+
+                  </div>
+
               )}
 
-
-            </ButtonGroup>
-          </Field>
+          </div>
         </div>
 
           <div className="flex gap-3 mt-5 ">
