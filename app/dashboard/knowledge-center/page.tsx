@@ -27,6 +27,42 @@ export default function KnowledgeCenter() {
   const [search, setSearch] = useState("");
   const [searchSubmitted, setSearchSubmitted] = useState(false);
 
+  const [categoryResults, setCategoryResults] = useState<Category[]>([]);
+
+  // search for category
+const handleCategorySearch = async () => {
+
+    const query = search.trim();
+
+    if (!query) {
+        setCategoryResults([]);
+        return;
+    }
+
+    try {
+
+        const response = await apiFetch(
+            `/categories/search?name=${encodeURIComponent(query)}`
+        );
+
+        if (!response.ok) {
+            throw new Error("Category search failed");
+        }
+
+        const data: Category[] = await response.json();
+
+        setCategoryResults(data);
+
+    } catch (error) {
+
+        console.error("Error searching categories:", error);
+
+        setCategoryResults([]);
+
+    }
+
+};
+
   const searchResults = [
   ...MOCK_COURSES.map((course) => ({
     id: course.id,
@@ -137,11 +173,14 @@ useEffect(() => {
                   />
 
                   <Button
-                    type="button"
-                    onClick={() => setSearchSubmitted(true)}
-                    className="bg-blue-600 text-white"
+                      type="button"
+                      onClick={async () => {
+                          setSearchSubmitted(true);
+                          await handleCategorySearch();
+                      }}
+                      className="bg-blue-600 text-white"
                   >
-                    Search
+                      Search
                   </Button>
 
                 </ButtonGroup>
@@ -159,6 +198,68 @@ useEffect(() => {
                     <span className="text-xs text-gray-500">
                       {searchResults.length} results found
                     </span>
+                  </div>
+
+                  {/* Category Search Results */}
+
+                  <div className="mb-5">
+
+                      <h3 className="mb-3 text-sm font-semibold text-slate-800">
+                          Categories
+                      </h3>
+
+                      {categoryResults.length > 0 ? (
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+
+                              {categoryResults.map((category) => (
+
+                                  <Link
+                                      key={category.id}
+                                      href={`/dashboard/knowledge-center/categories/courses?categoryId=${category.id}`}
+                                      className="flex items-center gap-3 rounded-lg border p-3 transition hover:bg-indigo-50"
+                                  >
+
+                                      {category.image?.url ? (
+
+                                          <img
+                                              src={category.image.url}
+                                              alt={category.name}
+                                              className="h-10 w-10 object-contain"
+                                          />
+
+                                      ) : (
+
+                                          <div className="h-10 w-10 rounded bg-indigo-100" />
+
+                                      )}
+
+                                      <div>
+
+                                          <h4 className="text-sm font-semibold text-slate-800">
+                                              {category.name}
+                                          </h4>
+
+                                          <p className="text-xs text-gray-500">
+                                              {category.resourceCount}+ resources
+                                          </p>
+
+                                      </div>
+
+                                  </Link>
+
+                              ))}
+
+                          </div>
+
+                      ) : (
+
+                          <p className="text-sm text-gray-500">
+                              No matching categories found.
+                          </p>
+
+                      )}
+
                   </div>
 
                   {searchResults.length > 0 ? (
@@ -696,3 +797,4 @@ export  function LearningPath() {
     </div>
   );
 }
+
